@@ -1,24 +1,6 @@
-/*void setup() {
-pinMode(13, OUTPUT);
-}
-
-void loop() {
-digitalWrite(13, HIGH);
-delay(1000);
-digitalWrite(13, LOW);
-delay(1000);
-}*/
-
-#include "bt.h"
+#include "esp_bt.h"
 #include "esp_gap_ble_api.h"
 
-void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(115200);
-  while (!Serial);
-
-  Serial.printf("Revision: %d\r\n" , ESP.getChipRevision());
-}
 
 static const uint8_t HWID[5] = {0x01, 0x71, 0x91, 0xb4, 0x88};// LINEから払い出されたhw idを2桁区切りにして0x__の部分に入れる
 static const uint16_t UUID_FOR_LINECORP = 0xFE6F;
@@ -148,6 +130,3 @@ static void updateAdvertisingData() {
 void loop() {
 
 }
-
-
-//line開発者アカウント　
