@@ -25,7 +25,7 @@ void loop(){
 double Duration = 0; //受信した間隔
 double Distance = 0; //距離
 
-String hwid = 0171c239b0;
+String hwid = 017190a280;
 
 int led1 = 19; //LEDがついている位置
  

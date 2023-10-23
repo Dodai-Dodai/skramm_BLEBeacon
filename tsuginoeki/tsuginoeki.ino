@@ -25,7 +25,9 @@ void loop(){
 double Duration = 0; //受信した間隔
 double Distance = 0; //距離
 
-String hwid = 0171c239b0;
+const String hwid = "017190a280";
+
+const int DistanceNum = 70;
 
 int led1 = 19; //LEDがついている位置
  
@@ -51,7 +53,7 @@ void loop() {
     Serial.print(Distance);
     Serial.println(" cm");
 
-    if (Distance < 20) {        //  20cm以内になるとLED1が点灯
+    if (Distance < DistanceNum) {        //  DistanceNum cm以内になるとLED1が点灯
       digitalWrite(led1, HIGH);
       delay(1000); //取得間隔1秒
       digitalWrite(led1, LOW);
