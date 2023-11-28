@@ -34,7 +34,7 @@ void loop() {
   Duration = pulseIn( echoPin, HIGH ); //センサからの入力
   if (Duration > 0) {
     Duration = Duration/2; //往復距離を半分にする
-    Distance1 = Duration*340*100/1000000; // 音速を340m/sに設定
+    Distance1 = (int)((Duration*340*100/1000000)/10)*10; // 音速を340m/sに設定
     /*if(Distance1 < 1000){
 
     }*/
@@ -51,7 +51,7 @@ void loop() {
   Duration = pulseIn( echoPin, HIGH ); //センサからの入力
   if (Duration > 0) {
     Duration = Duration/2; //往復距離を半分にする
-    Distance2 = Duration*340*100/1000000; // 音速を340m/sに設定
+    Distance2 = (int)((Duration*340*100/1000000)/10)*10; // 音速を340m/sに設定
     Serial.print("Distance2 : ");
     Serial.print(Distance2);
     Serial.println(" cm");
@@ -66,7 +66,7 @@ void loop() {
   Duration = pulseIn( echoPin, HIGH ); //センサからの入力
   if (Duration > 0) {
     Duration = Duration/2; //往復距離を半分にする
-    Distance3 = Duration*340*100/1000000; // 音速を340m/sに設定
+    Distance3 = (int)((Duration*340*100/1000000)/10)*10; // 音速を340m/sに設定
     Serial.print("Distance3 : ");
     Serial.print(Distance3);
     Serial.println(" cm");
@@ -74,16 +74,20 @@ void loop() {
 
   Distance21 = Distance2 - Distance1;
   Distance23 = Distance2 - Distance3;
+  /*Serial.print("Distance21 : ");
+  Serial.println(Distance21);
+  Serial.print("Distance23 : ");
+  Serial.println(Distance23);*/
   if(Distance21 == 0 || Distance23 == 0){
     Distance = Distance2;
   }
   else if(Distance21 - Distance23 == 0){
     Distance = Distance1;
   }
-  else if(Distance21 - Distance23 >= -5 && Distance21 - Distance23 <= 5){
+  else if(Distance21 - Distance23 >= -30 && Distance21 - Distance23 <= 30){
     Distance = (Distance1 + Distance3) / 2;
   }
-  else if((Distance21 >= -5 && Distance21 <= 5) || (Distance23 >= -5 && Distance23 <= 5)){
+  else if((Distance21 >= -30 && Distance21 <= 30) || (Distance23 >= -30 && Distance23 <= 30)){
     Distance = Distance2;
   }
 
@@ -100,5 +104,7 @@ void loop() {
     else{
       Serial.println("Distance  : 距離外");
     }
-  delay(10000);
+  esp_sleep_enable_timer_wakeup(10000 * 1000);  // wakeup every 10.0secs
+  esp_deep_sleep_start();
+  //delay(10000);
 }
