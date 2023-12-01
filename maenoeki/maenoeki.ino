@@ -18,13 +18,12 @@ double Distance = 0;
 int led1 = 19; //LEDがついている位置
  
 void setup() {
-Serial.begin( 115200 );//Arduino Unoは9600,ESPで試す場合はは115200
-pinMode( echoPin, INPUT );
-pinMode( trigPin, OUTPUT );
-pinMode(led1,OUTPUT);
-}
- 
-void loop() {
+  
+  Serial.begin( 115200 );//Arduino Unoは9600,ESPで試す場合はは115200
+  pinMode( echoPin, INPUT );
+  pinMode( trigPin, OUTPUT );
+  pinMode(led1,OUTPUT);
+
   digitalWrite(trigPin, LOW); 
   delayMicroseconds(2); 
   digitalWrite( trigPin, HIGH ); //超音波を出力
@@ -34,10 +33,7 @@ void loop() {
   Duration = pulseIn( echoPin, HIGH ); //センサからの入力
   if (Duration > 0) {
     Duration = Duration/2; //往復距離を半分にする
-    Distance1 = Duration*340*100/1000000; // 音速を340m/sに設定
-    /*if(Distance1 < 1000){
-
-    }*/
+    Distance1 = (int)((Duration*340*100/1000000)/10)*10; // 音速を340m/sに設定
     Serial.print("Distance1 : ");
     Serial.print(Distance1);
     Serial.println(" cm");
@@ -51,7 +47,7 @@ void loop() {
   Duration = pulseIn( echoPin, HIGH ); //センサからの入力
   if (Duration > 0) {
     Duration = Duration/2; //往復距離を半分にする
-    Distance2 = Duration*340*100/1000000; // 音速を340m/sに設定
+    Distance2 = (int)((Duration*340*100/1000000)/10)*10; // 音速を340m/sに設定
     Serial.print("Distance2 : ");
     Serial.print(Distance2);
     Serial.println(" cm");
@@ -66,7 +62,7 @@ void loop() {
   Duration = pulseIn( echoPin, HIGH ); //センサからの入力
   if (Duration > 0) {
     Duration = Duration/2; //往復距離を半分にする
-    Distance3 = Duration*340*100/1000000; // 音速を340m/sに設定
+    Distance3 = (int)((Duration*340*100/1000000)/10)*10; // 音速を340m/sに設定
     Serial.print("Distance3 : ");
     Serial.print(Distance3);
     Serial.println(" cm");
@@ -80,25 +76,30 @@ void loop() {
   else if(Distance21 - Distance23 == 0){
     Distance = Distance1;
   }
-  else if(Distance21 - Distance23 >= -5 && Distance21 - Distance23 <= 5){
+  else if(Distance21 - Distance23 >= -30 && Distance21 - Distance23 <= 30){
     Distance = (Distance1 + Distance3) / 2;
   }
-  else if((Distance21 >= -5 && Distance21 <= 5) || (Distance23 >= -5 && Distance23 <= 5)){
+  else if((Distance21 >= -30 && Distance21 <= 30) || (Distance23 >= -30 && Distance23 <= 30)){
     Distance = Distance2;
   }
 
   if (Distance < 100) {        //  100cm以内になるとLED1が点灯
-      digitalWrite(led1, HIGH);
-      delay(500); //取得間隔0.5秒
-      digitalWrite(led1, LOW);
-      Serial.print("Distance  : ");
-      Serial.print(Distance);
-      Serial.println(" cm");
-      GreenBeacon beacon = GreenBeacon("0171c239b0");
-      beacon.start("Hello");
-    }
-    else{
-      Serial.println("Distance  : 距離外");
-    }
-  delay(10000);
+    digitalWrite(led1, HIGH);
+    delay(500); //取得間隔0.5秒
+    digitalWrite(led1, LOW);
+    Serial.print("Distance  : ");
+    Serial.print(Distance);
+    Serial.println(" cm");
+    GreenBeacon beacon = GreenBeacon("0171c239b0");
+    beacon.start("Hello");
+    delay(10000);
+  }
+  else{
+    Serial.println("Distance  : 距離外");
+  } 
+  esp_sleep_enable_timer_wakeup(10000 * 1000);  // wakeup every 10.0secs
+  esp_deep_sleep_start();
+}
+ 
+void loop() {
 }
