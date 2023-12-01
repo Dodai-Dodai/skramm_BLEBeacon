@@ -18,13 +18,12 @@ double Distance = 0;
 int led1 = 19; //LEDがついている位置
  
 void setup() {
-Serial.begin( 115200 );//Arduino Unoは9600,ESPで試す場合はは115200
-pinMode( echoPin, INPUT );
-pinMode( trigPin, OUTPUT );
-pinMode(led1,OUTPUT);
-}
- 
-void loop() {
+  
+  Serial.begin( 115200 );//Arduino Unoは9600,ESPで試す場合はは115200
+  pinMode( echoPin, INPUT );
+  pinMode( trigPin, OUTPUT );
+  pinMode(led1,OUTPUT);
+
   digitalWrite(trigPin, LOW); 
   delayMicroseconds(2); 
   digitalWrite( trigPin, HIGH ); //超音波を出力
@@ -74,10 +73,6 @@ void loop() {
 
   Distance21 = Distance2 - Distance1;
   Distance23 = Distance2 - Distance3;
-  /*Serial.print("Distance21 : ");
-  Serial.println(Distance21);
-  Serial.print("Distance23 : ");
-  Serial.println(Distance23);*/
   if(Distance21 == 0 || Distance23 == 0){
     Distance = Distance2;
   }
@@ -92,19 +87,22 @@ void loop() {
   }
 
   if (Distance < 100) {        //  100cm以内になるとLED1が点灯
-      digitalWrite(led1, HIGH);
-      delay(500); //取得間隔0.5秒
-      digitalWrite(led1, LOW);
-      Serial.print("Distance  : ");
-      Serial.print(Distance);
-      Serial.println(" cm");
-      GreenBeacon beacon = GreenBeacon("0171c239b0");
-      beacon.start("Hello");
-    }
-    else{
-      Serial.println("Distance  : 距離外");
-    }
+    digitalWrite(led1, HIGH);
+    delay(500); //取得間隔0.5秒
+    digitalWrite(led1, LOW);
+    Serial.print("Distance  : ");
+    Serial.print(Distance);
+    Serial.println(" cm");
+    GreenBeacon beacon = GreenBeacon("0171c239b0");
+    beacon.start("Hello");
+  }
+  else{
+    Serial.println("Distance  : 距離外");
+  } 
   esp_sleep_enable_timer_wakeup(10000 * 1000);  // wakeup every 10.0secs
   esp_deep_sleep_start();
   //delay(10000);
+}
+ 
+void loop() {
 }
