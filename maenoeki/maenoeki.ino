@@ -34,9 +34,6 @@ void setup() {
   if (Duration > 0) {
     Duration = Duration/2; //往復距離を半分にする
     Distance1 = (int)((Duration*340*100/1000000)/10)*10; // 音速を340m/sに設定
-    /*if(Distance1 < 1000){
-
-    }*/
     Serial.print("Distance1 : ");
     Serial.print(Distance1);
     Serial.println(" cm");
@@ -95,13 +92,13 @@ void setup() {
     Serial.println(" cm");
     GreenBeacon beacon = GreenBeacon("0171c239b0");
     beacon.start("Hello");
+    delay(10000);
   }
   else{
     Serial.println("Distance  : 距離外");
   } 
   esp_sleep_enable_timer_wakeup(10000 * 1000);  // wakeup every 10.0secs
   esp_deep_sleep_start();
-  //delay(10000);
 }
  
 void loop() {
